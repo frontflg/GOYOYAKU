@@ -1,0 +1,177 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta http-equiv="content-script-type" content="text/javascript">
+  <meta http-equiv="content-style-type" content="text/css">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>レストラン予約システム</title>
+  <hta:application id="myapp" 
+    applicationname="GOYOYAKU" 
+    border="thick"
+    caption="yes"
+    navigate="yes"
+    showintaskbar="yes"
+    singleinstance="yes"
+    sysmenu="yes"
+    windowstate="normal">
+  <script src="GOYOYAKU.js" type="text/javascript"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/redmond/jquery-ui.css">
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" />
+  <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/i18n/jquery.ui.datepicker-ja.js"></script>
+  <script type="text/javascript">
+    window.moveTo(15,15)
+    window.resizeTo(1330, 740)
+    $(function() {
+      $("#reservedate").datepicker({ dateFormat: 'yy/mm/dd' });
+      $("#visitdate").datepicker({ dateFormat: 'yy/mm/dd' });
+      $("#receptdate").datepicker({ dateFormat: 'yy/mm/dd' });
+      $("#credate").datepicker({ dateFormat: 'yy/mm/dd' });
+      $("#deldate").datepicker({ dateFormat: 'yy/mm/dd' });
+    });
+  </script>
+  <style type="text/css">
+    * { margin: 0; padding: 0; }
+    body { font-size: 15px; }
+    .lab {
+      background-color: #ff0000;
+      color: #ffffff;
+    }
+    thead, tbody { display: block; }
+    tbody {
+      overflow-y: scroll;
+      height: 560px;
+    }
+    input, textarea {
+      border: none;
+    }
+    .ui-datepicker { height: 255px; width: 200px; overflow: hidden; -ms-overflow-style:none;}
+  </style>
+</head>
+<body class="base">
+  <div id="tabs">
+    <ul>
+      <li><a href="#tab01">予約一覧</a>
+      <li><a href="#tab02"><div id="lbl02">予約新規</div></a>
+      <li><a href="#tab03">コース一覧</a>
+      <li><a href="#tab04"><div id="lbl04">コース新規</div></a>
+   </ul>
+  <div id="tab01">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="thead-dark">
+          <tr><th width="150px">予約NO</th><th width="470px">予約名</th><th width="410px">代表者</th><th width="110px">予約日</th><th width="80px">状況</th></tr>
+        </thead>
+        <tbody id="lst01">
+        </tbody>
+      </table>
+    </div>
+    <div id="footer"></div>
+  </div>
+  <div id="tab02">
+    <div class="table-responsive">
+      <table class="table">
+        <tr><td colspan="2">予約NO：<input id="reserveid" type="text" maxlength="9" size="10" required>
+            状態：
+            <select name="status" id="status">
+              <option value="0">予約</option>
+              <option value="1">保留</option>
+              <option value="2">来店</option>
+              <option value="3">済み</option>
+              <option value="4">ｷｬﾝｾﾙ</option>
+              <option value="9">その他</option>
+            </select></td></tr>
+        <tr><td colspan="2">予約名：  <input id="customer" type="text" maxlength="100" size="60" required>
+           &nbsp人数：    <input id="reservenum" type="number" maxlength="4" size="5"></td></tr>
+        <tr><td colspan="2">代表者：  <input id="delegate" type="text" maxlength="50"  size="60">
+           &nbspTEL：     <input id="telnum"     type="tel" maxlength="20" size="22"></td></tr>
+        <tr><td colspan="2">郵便番号：<input id="postnum"  type="text" maxlength="8"   size="9">
+           &nbsp住所：    <input id="address"    type="text"   maxlength="50" size="57">
+           &nbspEmail：   <input id="email"      type="email"  maxlength="50" size="55"></td></tr>
+        <tr><td>数量1：   <input id="ordernum1"  type="number" maxlength="4"  size="5">
+           &nbsp注文1：   <select name="order1" id="order1"></select></td>
+            <td rowspan="5" align="left"><div id="Oimg1"></div></td></tr>
+        <tr><td>数量2：   <input id="ordernum2"  type="number" maxlength="4"  size="5">
+           &nbsp注文2：   <select name="order2" id="order2"></select></td></tr>
+        <tr><td>数量3：   <input id="ordernum3"  type="number" maxlength="4"  size="5">
+           &nbsp注文3：   <select name="order3" id="order3"></select></td></tr>
+        <tr><td>数量4：   <input id="ordernum4"  type="number" maxlength="4"  size="5">
+           &nbsp注文4：   <select name="order4" id="order4"></select></td></tr>
+        <tr><td>数量5：   <input id="ordernum5"  type="number" maxlength="4"  size="5">
+           &nbsp注文5：   <select name="order5" id="order5"></select></td></tr>
+        <tr><td colspan="2">備考：<input id="remarks" type="text" maxlength="255" size="154"></td></tr>
+        <tr><td colspan="2">対応：
+          <select id="response">
+            <option value="0" selected>未処理</option>
+            <option value="1">処理済</option>
+            <option value="2">お断り</option>
+            <option value="9">その他</option>
+          </select>
+           &nbsp評価：
+          <select id="evaluation">
+            <option value="0" selected></option>
+            <option value="1">良好</option>
+            <option value="2">普通</option>
+            <option value="3">ご不満</option>
+            <option value="4">クレーム</option>
+            <option value="5">不明</option>
+            <option value="9">その他</option>
+          </select>
+           &nbsp予約日：<input id="reservedate"  type="text" pattern="yyyy/MM/dd" maxlength="10" size="10" required>
+           &nbsp来店日：<input id="visitdate"    type="text" pattern="yyyy/MM/dd" maxlength="10" size="10">
+           &nbsp来店時：<input id="visittime"    type="time" pattern="hh:mm"      maxlength="5"  size="6" step="300">
+           &nbsp受付日：<input id="receptdate"   type="text" pattern="yyyy/MM/dd" maxlength="10" size="10">
+           &nbsp受付者：<input id="receptionist" type="text" maxlength="13" size="14"></td></tr>
+      </table>
+      <button id="insert" name="insert" onClick="insRec()" value="insert" class="btn btn-success" />登録</button>
+      <button type="submit" id="update" name="update" onClick="updRec()" value="update" class="btn btn-success" />更新</button>
+      <button id="delete" name="delete" onClick="delRec()" value="delete" formaction="delete" class="btn btn-danger" />削除</button>
+      <button id="clear"  name="clear"  onClick="clrScr()" value="clear"  class="btn btn-info" />新規</button>
+    </div>
+  </div>
+  <div id="tab03">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead class="thead-dark">
+          <tr><th width="100px">コースNO</th><th width="500px">コース名</th><th width="100px" align="right">単価</th>
+          <th width="100px">セット数</th><th width="110px">開始日</th><th width="60px">廃止</th></tr>
+        </thead>
+        <tbody id="lst03" class="tbody3">
+        </tbody>
+      </table>
+    </div>
+    <div id="footerC"></div>
+  </div>
+  <div id="tab04">
+    <div class="table-responsive">
+      <table class="table">
+        <tr><td>コースNO：<input id="courseid" type="text" maxlength="4" size="5" required>
+           廃止：<select name="delflg" id="delflg">
+                   <option value="0">　　</option>
+                   <option value="1">廃止</option>
+                 </select></td>
+            <td rowspan="6"><div id="Cimg"></div></td></tr>
+        <tr><td>コース名：<input id="coursename"  type="text" maxlength="50"  size="71" required></td></tr>
+        <tr><td>説明：<textarea id="description" cols="81" rows="7" maxlength="255"></textarea></td></tr>
+        <tr><td>イメージ：<input id="courseimg"   type="text"   maxlength="50" size="64">
+        <tr><td>単価：    <input id="unitprice"   type="number" maxlength="4"  size="5">
+           &nbsp数量：    <input id="setnum"      type="number" maxlength="4"  size="5">
+           &nbsp開始日：  <input id="credate"     type="text"   maxlength="10" size="10" pattern="yyyy/MM/dd">
+           &nbsp終了日：  <input id="deldate"     type="text"   maxlength="10" size="10" pattern="yyyy/MM/dd"></td></tr>
+        <tr><td>備考：<textarea id="remarksC" cols="81" rows="7" maxlength="255"></textarea></td></tr>
+      </table>
+      <button id="insertC" name="insertC" onClick="insCourse()" value="insertC" class="btn btn-success" />登録</button>
+      <button id="updateC" name="updateC" onClick="updCourse()" value="updateC" class="btn btn-success" type="submit" />更新</button>
+      <button id="deleteC" name="deleteC" onClick="delCourse()" value="deleteC" class="btn btn-danger" formaction="deleteC" />削除</button>
+      <button id="clearC"  name="clearC"  onClick="clrCourse()" value="clearC"  class="btn btn-info" />新規</button>
+    </div>
+  </div>
+  <script>
+    setCourseList();
+    setList();
+  </script>
+</body>
+</html>
