@@ -547,88 +547,53 @@ function delCourse() {
 }
 // 予約入力チェック
 function inpCheck () {
-  if (reserveid == '') { alert('予約NOは、必須入力項目です！');
-   $('#reserveid').focus();
-   $('#reserveid').style.backgroundColor = 'mistyrose';
-   return;
-  }
   $('#reserveid').css('backgroundColor','#FFFFFF');
-  if (getVal('customer') == 'null') { alert('予約名は、必須入力項目です！'); 
-    $('#customer').focus();
-    $('#customer').css('backgroundColor','mistyrose');
-    return false;
-  }
   $('#customer').css('backgroundColor','#FFFFFF');
-  if ( !isDate($('#reservedate').val())) { alert('予約日の日付形式が正しくありません！ ' + getVal('reservedate'));
-    $('#reservedate').focus();
-    $('#reservedate').css('backgroundColor','mistyrose');
-    return false;
-  }
   $('#reservedate').css('backgroundColor','#FFFFFF');
-  if (getVal('reservedate') == 'null') { alert('予約日は、必須入力項目です！');
-    $('#reservedate').focus();
-    $('#reservedate').css('backgroundColor','mistyrose');
-    return false;
-  }
-  if ( !isDate($('#visitdate').val())) { alert('来店日の日付形式が正しくありません！ ' + getVal('visitdate'));
-    $('#visitdate').focus();
-    $('#visitdate').css('backgroundColor','mistyrose');
-    return false;
-  }
   $('#visitdate').css('backgroundColor','#FFFFFF');
-  if ( !isDate($('#receptdate').val())) { alert('受付日の日付形式が正しくありません！ ' + getVal('receptdate'));
-    $('#receptdate').focus();
-    $('#receptdate').css('backgroundColor','mistyrose');
-    return false;
-  }
   $('#receptdate').css('backgroundColor','#FFFFFF');
-  if ( isNaN(getNum('ordernum1')) ) { alert('数値を入力してください！');
-    $('#ordernum1').focus();
-    $('#ordernum1').css('backgroundColor','mistyrose');
-    return false;
-  }
   $('#ordernum1').css('backgroundColor','#FFFFFF');
+  if (reserveid == '') { return atError ( 'reserveid', '予約NOは、必須入力項目です！'); }
+  if (getVal('customer') == 'null') { return atError ( 'customer', '予約名は、必須入力項目です！'); }
+  if (getVal('reservedate') == 'null') { return atError ( 'reservedate', '予約日は、必須入力項目です！'); }
+  if ( isNaN(getNum('ordernum1')) ) { return atError ( 'ordernum1', '数値を入力してください！'); }
+  if ( !isDate($('#reservedate').val())) { 
+    return atError ( 'reservedate', '予約日の日付形式が正しくありません！ ' + getVal('reservedate'));
+  }
+  if ( !isDate($('#visitdate').val())) { 
+    return atError ( 'visitdate', '来店日の日付形式が正しくありません！' + getVal('visitdate'));
+  }
+  if ( !isDate($('#receptdate').val())) { 
+    return atError ( 'receptdate', '受付日の日付形式が正しくありません！' + getVal('receptdate'));
+  }
   return true;
 }
 // コース入力チェック
 function inpCheckC () {
-  if (courseid == '') { alert('コースIDは、必須入力項目です！');
-   $('#courseid').focus();
-   $('#courseid').style.backgroundColor = 'mistyrose';
-   return;
-  }
   $('#courseid').css('backgroundColor','#FFFFFF');
-  if (getVal('coursename') == 'null') { alert('コース名は、必須入力項目です！'); 
-    $('#coursename').focus();
-    $('#coursename').css('backgroundColor','mistyrose');
-    return false;
-  }
   $('#coursename').css('backgroundColor','#FFFFFF');
-  if ( !isDate($('#credate').val())) { alert('開始日の日付形式が正しくありません！ ' + getVal('credate'));
-    $('#credate').focus();
-    $('#credate').css('backgroundColor','mistyrose');
-    return false;
-  }
   $('#credate').css('backgroundColor','#FFFFFF');
-  if ( !isDate($('#deldate').val())) { alert('終了日の日付形式が正しくありません！ ' + getVal('deldate'));
-    $('#deldate').focus();
-    $('#deldate').css('backgroundColor','mistyrose');
-    return false;
-  }
   $('#deldate').css('backgroundColor','#FFFFFF');
-  if ( isNaN(getNum('unitprice')) ) { alert('数値を入力してください！');
-    $('#unitprice').focus();
-    $('#unitprice').css('backgroundColor','mistyrose');
-    return false;
-  }
   $('#unitprice').css('backgroundColor','#FFFFFF');
-  if ( isNaN(getNum('setnum')) ) { alert('数値を入力してください！');
-    $('#setnum').focus();
-    $('#setnum').css('backgroundColor','mistyrose');
-    return false;
-  }
   $('#setnum').css('backgroundColor','#FFFFFF');
+  if (courseid == '') { return atError ( 'courseid', 'コースIDは、必須入力項目です！'); }
+  if (getVal('coursename') == 'null') { return atError ( 'coursename', 'コース名は、必須入力項目です！'); }
+  if ( isNaN(getNum('unitprice')) ) { return atError ( 'unitprice', '数値を入力してください！'); }
+  if ( isNaN(getNum('setnum')) ) { return atError ( 'isetnum', '数値を入力してください！'); }
+  if ( !isDate($('#credate').val())) { 
+    return atError ( 'deldate', '開始日の日付形式が正しくありません！ ' + getVal('deldate'));
+  }
+  if ( !isDate($('#deldate').val())) { 
+    return atError ( 'deldate', '入手日の日付形式が正しくありません！ ' + getVal('deldate'));
+  }
   return true;
+}
+// エラー処理
+function atError ( str, msg ) {
+  alert(msg);
+  $('#' + str).focus();
+  $('#' + str).css('backgroundColor','mistyrose');
+  return false;
 }
 // 日付フォーマットチェック
 function isDate ( strDate ) {
